@@ -25,6 +25,12 @@ export class AppComponent {
   items = new Array(13);
   setItems: Item[] = [];
 
+  id = 'qDuKsiwS5xw'
+  player: YT.Player;
+  playerVars = {
+    controls: 0
+  }
+
   form = this.fb.group({
     body: ['',Validators.required]
   });
@@ -70,5 +76,14 @@ export class AppComponent {
   }
   changeSize(index:number, size: 's' | 'm' | 'l') {
     this.setItems[index].size = size
+  }
+
+  savePlayer(player) {
+    this.player = player;
+    this.player.playVideo();
+    this.player.mute();
+  }
+  onStateChange(event) {
+    console.log('player state', event.data);
   }
 }

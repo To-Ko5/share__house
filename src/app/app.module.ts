@@ -16,7 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
-
+import { NgxYoutubePlayerModule } from 'ngx-youtube-player';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -37,7 +37,8 @@ import { MatMenuModule } from '@angular/material/menu';
     ReactiveFormsModule,
     MatSidenavModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    NgxYoutubePlayerModule
   ],
   providers: [AngularFirestore],
   bootstrap: [AppComponent]

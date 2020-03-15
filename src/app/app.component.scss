@@ -35,8 +35,18 @@
   &.dark:after {
     opacity: 0.8;
   }
+  &__display {
+    position: absolute;
+    top: 40;
+    left: 40;
+    width: 400px;
+    height: 300px;
+    background: black;
+    padding: 16px;
+  }
   &__light {
     position: absolute;
+    z-index: 300;
     top:0;
     left: 50%;
     transform: translateX(-50%);

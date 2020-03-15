@@ -31,6 +31,17 @@
     <div class="room" [class.dark]="!(lightStatus$ | async)">
       <div class="room__light" (click)="toggleLight()"></div>
 
+      <div class="room__display"         cdkDragBoundary=".room"
+      cdkDrag>
+        <youtube-player
+        width="100%"
+        [videoId]="id"
+        (ready)="savePlayer($event)"
+        (change)="onStateChange($event)"
+        [playerVars]="playerVars"
+      ></youtube-player>
+      </div>
+
       <div class="item-outer" *ngFor="let item of setItems; index as i">
         <img
           class="item item--{{item.size}}"
