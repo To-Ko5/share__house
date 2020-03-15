@@ -2,6 +2,18 @@
   flex: 1;
 }
 
+.side-nav {
+  width: 300px;
+  padding: 16px;
+}
+
+.item-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2,1fr);
+  align-items: center;
+}
+
 .room {
   width: 1000px;
   margin: 24px auto;
@@ -49,4 +61,18 @@
   bottom: 50px;
   left: 0;
   max-width: 50px;
+}
+
+
+.item {
+  display: block;
+  &--s {
+    max-width: 50px;
+  }
+  &--m {
+    max-width: 100px;
+  }
+  &--l {
+    max-width: 200px;
+  }
 }

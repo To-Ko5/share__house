@@ -11,8 +11,12 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { MatToolbarModule, MatButtonModule, MatFormField, MatInputModule, MatIconModule, MatFormFieldModule } from '@angular/material';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -20,7 +24,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAnalyticsModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
@@ -31,7 +34,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatIconModule,
     DragDropModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatMenuModule
   ],
   providers: [AngularFirestore],
   bootstrap: [AppComponent]

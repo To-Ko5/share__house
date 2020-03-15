@@ -3,6 +3,7 @@ import { AuthService } from './services/auth.service';
 import { RoomService } from './services/room.service';
 import { tap, skip } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Item } from './interfaces/item';
 
 @Component({
   selector: 'app-root',
@@ -19,11 +20,14 @@ export class AppComponent {
   )
 
   lightStatus:boolean;
-  messages = {}
+  messages = {};
+
+  items = new Array(13);
+  setItems: Item[] = [];
 
   form = this.fb.group({
     body: ['',Validators.required]
-  })
+  });
   constructor(private authService: AuthService,
     private roomService: RoomService,
     private fb: FormBuilder
@@ -57,5 +61,14 @@ export class AppComponent {
       this.form.value.body
     )
     this.form.reset();
+  }
+  addItem(i: number) {
+    this.setItems.push({
+      id: i,
+      size: 'm'
+    });
+  }
+  changeSize(index:number, size: 's' | 'm' | 'l') {
+    this.setItems[index].size = size
   }
 }

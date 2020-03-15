@@ -1,32 +1,83 @@
 <mat-toolbar>
-<button mat-button>share-house</button>
-<span class="spacer"></span>
+  <button mat-icon-button (click)="sideNav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <button mat-button>share-house</button>
+  <span class="spacer"></span>
 
-<button *ngIf="!(user$ | async)" mat-raised-button (click)="login()">ログイン</button>
-<!-- *ngIf="!(user$ | async)"  -->
+  <button *ngIf="!(user$ | async)" mat-raised-button (click)="login()">
+    ログイン
+  </button>
+  <!-- *ngIf="!(user$ | async)"  -->
 
-<button *ngIf="user$ | async as user" mat-raised-button (click)="logout(user.uid)">ログアウト</button>
-
+  <button
+    *ngIf="user$ | async as user"
+    mat-raised-button
+    (click)="logout(user.uid)"
+  >
+    ログアウト
+  </button>
 </mat-toolbar>
 
-<div class="room" [class.dark]="!(lightStatus$ | async)">
-  <div class="room__light" (click)="toggleLight()"></div>
-  <div class="user" *ngFor="let user of users$ | async" [style.left]="user.leftPosition" cdkDragBoundary=".room" cdkDragLockAxis="x" cdkDrag>
+<mat-drawer-container class="">
+  <mat-drawer #sideNav mode="side" class="side-nav">
+    <div class="item-grid">
+      <mat-card *ngFor="let item of items; index as i" (click)="addItem(i + 1)">
+        <img src="assets/sidenav-img/{{ i + 1 | number: '2.0' }}.svg" alt="" />
+      </mat-card>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="room" [class.dark]="!(lightStatus$ | async)">
+      <div class="room__light" (click)="toggleLight()"></div>
 
-    <p *ngFor="let message of messages[user.uid]">{{message}}</p>
-    <img src="assets/images/{{user.avatarId}}.png">
-  </div>
-  <div class="room__floor">
+      <div class="item-outer" *ngFor="let item of setItems; index as i">
+        <img
+          class="item item--{{item.size}}"
+          src="assets/sidenav-img/{{ item.id | number: '2.0' }}.svg"
+          alt=""
+          cdkDragBoundary=".room"
+          cdkDrag
+          [matMenuTriggerFor]="menu"
+        />
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="changeSize(i,'s')">S</button>
+          <button mat-menu-item (click)="changeSize(i,'m')">M</button>
+          <button mat-menu-item (click)="changeSize(i,'l')">L</button>
+        </mat-menu>
+      </div>
+      <div
+        class="user"
+        *ngFor="let user of users$ | async"
+        [style.left]="user.leftPosition"
+        cdkDragBoundary=".room"
+        cdkDragLockAxis="x"
+        cdkDrag
+      >
+        <p *ngFor="let message of messages[user.uid]">{{ message }}</p>
+        <img src="assets/images/{{ user.avatarId }}.png" />
+      </div>
+      <div class="room__floor"></div>
+    </div>
 
-  </div>
-</div>
+    <form
+      *ngIf="user$ | async as user"
+      [formGroup]="form"
+      (ngSubmit)="sendMessage(user.uid)"
+    >
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          formControlName="body"
+          autofocus
+          autocomplete="off"
+        />
+      </mat-form-field>
 
-<form *ngIf="user$ | async as user" [formGroup]="form" (ngSubmit)="sendMessage(user.uid)">
-<mat-form-field>
- <input type="text" matInput formControlName="body" autofocus autocomplete="off">
-</mat-form-field>
-
- <button mat-icon-button>
-   <mat-icon>send</mat-icon>
- </button>
- </form>
+      <button mat-icon-button>
+        <mat-icon>send</mat-icon>
+      </button>
+    </form>
+  </mat-drawer-content>
+</mat-drawer-container>
