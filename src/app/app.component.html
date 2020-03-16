@@ -77,6 +77,7 @@
       (ngSubmit)="sendMessage(user.uid)"
     >
       <mat-form-field>
+        <mat-label>チャット</mat-label>
         <input
           type="text"
           matInput
@@ -85,8 +86,25 @@
           autocomplete="off"
         />
       </mat-form-field>
-
       <button mat-icon-button>
+        <mat-icon>send</mat-icon>
+      </button>
+    </form>
+
+    <form [formGroup]="youtubeForm" (submit)="changeYoutube()">
+      <mat-form-field>
+        <mat-label>URL</mat-label>
+        <input
+          type="text"
+          matInput
+          formControlName="url"
+          autofocus
+          autocomplete="off"
+          required
+        />
+      </mat-form-field>
+
+      <button mat-icon-button [disabled]="youtubeForm.invalid">
         <mat-icon>send</mat-icon>
       </button>
     </form>

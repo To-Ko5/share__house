@@ -1,81 +1,92 @@
-import { Component } from '@angular/core';
-import { AuthService } from './services/auth.service';
-import { RoomService } from './services/room.service';
-import { tap, skip } from 'rxjs/operators';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Item } from './interfaces/item';
+import { Component } from "@angular/core";
+import { AuthService } from "./services/auth.service";
+import { RoomService } from "./services/room.service";
+import { tap, skip } from "rxjs/operators";
+import { FormBuilder, Validators } from "@angular/forms";
+import { Item } from "./interfaces/item";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"]
 })
 export class AppComponent {
-  title = 'share-house';
+  title = "share-house";
 
   users$ = this.roomService.getUsers();
   user$ = this.authService.user$;
-  lightStatus$ = this.roomService.lightStatus.pipe(
-    tap(status => this.lightStatus = status)
-  )
+  lightStatus$ = this.roomService.lightStatus$.pipe(
+    tap(status => (this.lightStatus = status))
+  );
 
-  lightStatus:boolean;
+  lightStatus: boolean;
   messages = {};
 
   items = new Array(13);
   setItems: Item[] = [];
 
-  id = 'qDuKsiwS5xw'
+  id = "qDuKsiwS5xw";
   player: YT.Player;
   playerVars = {
     controls: 0
-  }
+  };
 
   form = this.fb.group({
-    body: ['',Validators.required]
+    body: ["", Validators.required]
   });
-  constructor(private authService: AuthService,
+
+  youtubeForm = this.fb.group({
+    url: ["", Validators.required]
+  });
+
+  constructor(
+    private authService: AuthService,
     private roomService: RoomService,
     private fb: FormBuilder
-    ) {
-      this.roomService.getMessage().pipe(skip(1)).subscribe(messages => {
+  ) {
+    this.roomService
+      .getMessage()
+      .pipe(skip(1))
+      .subscribe(messages => {
         const message = messages[0];
-        if(!this.messages[message.uid]) {
-          this.messages[message.uid] = []
+        if (!this.messages[message.uid]) {
+          this.messages[message.uid] = [];
         }
-          this.messages[message.uid].unshift(message.body);
-          setTimeout(()=>{
-            this.messages[message.uid].pop();
-          },5000)
-      })
+        this.messages[message.uid].unshift(message.body);
+        setTimeout(() => {
+          this.messages[message.uid].pop();
+        }, 5000);
+      });
+    this.roomService.youtubeId$.subscribe(youtubeId => {
+      if (this.player) {
+        this.player.loadVideoById(youtubeId);
+      }
+    });
   }
 
-  login(){
-    this.authService.login()
+  login() {
+    this.authService.login();
   }
 
-  logout(uid: string){
-    this.authService.logout(uid)
+  logout(uid: string) {
+    this.authService.logout(uid);
   }
 
-  toggleLight(){
+  toggleLight() {
     this.roomService.toggleLight(this.lightStatus);
   }
-  sendMessage(uid:string) {
-    this.roomService.sendMessage(
-      uid,
-      this.form.value.body
-    )
+  sendMessage(uid: string) {
+    this.roomService.sendMessage(uid, this.form.value.body);
     this.form.reset();
   }
   addItem(i: number) {
     this.setItems.push({
       id: i,
-      size: 'm'
+      size: "m"
     });
   }
-  changeSize(index:number, size: 's' | 'm' | 'l') {
-    this.setItems[index].size = size
+  changeSize(index: number, size: "s" | "m" | "l") {
+    this.setItems[index].size = size;
   }
 
   savePlayer(player) {
@@ -83,7 +94,11 @@ export class AppComponent {
     this.player.playVideo();
     this.player.mute();
   }
-  onStateChange(event) {
-    console.log('player state', event.data);
+  onStateChange(event) {}
+
+  changeYoutube() {
+    if (this.youtubeForm.valid) {
+      this.roomService.changeYoutube(this.youtubeForm.value.url);
+    }
   }
 }
