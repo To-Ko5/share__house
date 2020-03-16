@@ -56,6 +56,9 @@
     cursor: pointer;
     border-radius: 50%;
   }
+  &.dark &__light {
+    background: rgb(255, 255, 193);
+  }
   &__floor {
     position: absolute;
     bottom: 0;
